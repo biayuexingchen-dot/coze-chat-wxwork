@@ -41,8 +41,8 @@ graph LR
 ### 2. 获取代码
 
 ```bash
-git clone <your-repo-url>
-cd <your-repo-name>
+git clone https://github.com/biayuexingchen-dot/coze-chat-wxwork.git
+cd coze-chat-wxwork
 
 ```
 
