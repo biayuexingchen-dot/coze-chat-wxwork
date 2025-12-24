@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电小果 - 随身WiFi新物种</title>
+    <style>
+        /* =========================================
+           1. 全局变量与新风格定义 (清新极简风)
+           ========================================= */
+        :root {
+            --primary: #007AFF; /* 科技蓝 */
+            --primary-light: #E5F1FF;
+            --accent: #34C759; /* 成功绿 */
+            --bg-body: #F5F5F7; /* 浅灰背景 */
+            --bg-card: #FFFFFF;
+            --text-main: #1D1D1F; /* 深灰近黑 */
+            --text-sec: #86868B;
+            --border: rgba(0, 0, 0, 0.05);
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.08);
+            --gradient: linear-gradient(135deg, #007AFF 0%, #5AC8FA 100%);
+            --radius: 24px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+            padding-top: 60px;
+        }
+
+        /* 动画保持不变 */
+        .main-view { display: none; animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        .main-view.active { display: block; }
+        .sub-content-section { display: none; animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); padding: 60px 5%; max-width: 1100px; margin: 0 auto; min-height: 80vh; }
+        .sub-content-section.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* =========================================
+           2. 导航栏 (悬浮毛玻璃)
+           ========================================= */
+        nav {
+            position: fixed; top: 0; width: 100%; height: 64px; padding: 0 40px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-size: 20px; font-weight: 700; color: var(--text-main);
+            cursor: pointer; letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex; gap: 8px; background: transparent;
+        }
+
+        .nav-btn {
+            background: transparent; border: none; color: var(--text-sec);
+            padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 500;
+            cursor: pointer; transition: all 0.2s;
+        }
+
+        .nav-btn:hover { color: var(--primary); background: var(--primary-light); }
+        .nav-btn.active { color: var(--text-main); font-weight: 600; background: rgba(0,0,0,0.05); }
+
+        .buy-btn {
+            background: var(--text-main); border: none; padding: 8px 20px;
+            border-radius: 99px; color: white; font-size: 13px; font-weight: 500; cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .buy-btn:hover { background: var(--primary); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,122,255,0.3); }
+
+        /* =========================================
+           3. 首页 (Home View) - 纯净风格
+           ========================================= */
+        .hero {
+            min-height: 90vh; display: flex; align-items: center;
+            justify-content: center; padding: 0 8%; position: relative;
+            background: #fff; border-bottom-left-radius: 60px; border-bottom-right-radius: 60px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.02);
+            flex-direction: column; text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 72px; line-height: 1.05; margin-bottom: 24px; letter-spacing: -2px;
+            color: #111;
+        }
+
+        .hero p { color: var(--text-sec); font-size: 20px; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+        .tag {
+            background: var(--primary-light); color: var(--primary);
+            padding: 6px 14px; border-radius: 99px; font-size: 12px; font-weight: 600;
+            display: inline-block; margin-bottom: 24px; border: none;
+        }
+
+        /* 3D Device - 重新设计为白色简约款 */
+        .device-container {
+            width: 320px; height: 500px; perspective: 1500px; margin-top: 40px;
+        }
+        .device {
+            width: 280px; height: 460px;
+            background: #F2F2F2; /* 浅灰边框 */
+            border-radius: 40px; position: absolute; left: 50%;
+            transform: translateX(-50%) rotateY(-5deg) rotateX(5deg);
+            box-shadow: 20px 20px 60px rgba(0,0,0,0.1), -5px -5px 20px rgba(255,255,255,1);
+            border: 6px solid #fff;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            animation: float 5s ease-in-out infinite;
+        }
+        .device-screen {
+            width: 90%; height: 90%; background: #fff;
+            border-radius: 32px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.05); position: relative; overflow: hidden;
+        }
+
+        /* 屏幕内的UI变更为清新风 */
+        .wifi-icon {
+            width: 80px; height: 80px; background: var(--primary-light);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: var(--primary); font-size: 30px; animation: pulse 3s infinite;
+            border: none; /* 去掉边框 */
+        }
+        .wifi-icon::after { display: none; } /* 去掉原来的红点 */
+        .wifi-icon::before { content: 'Wi-Fi'; font-weight: bold; } /* 伪元素模拟图标 */
+
+        /* 统计栏 - 浮动卡片式 */
+        .stats-bar {
+            display: flex; justify-content: center; gap: 20px; padding: 40px 0;
+            margin-top: -40px; position: relative; z-index: 2;
+        }
+        .stats-item {
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(10px);
+            padding: 20px 40px; border-radius: 20px;
+            box-shadow: var(--shadow-sm); border: 1px solid rgba(255,255,255,1);
+            text-align: center;
+        }
+
+        /* 特性网格 */
+        .features-grid { padding: 100px 5%; max-width: 1200px; margin: 0 auto; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
+        .feature-card {
+            background: var(--bg-card); padding: 50px 40px; border-radius: 32px;
+            border: none; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: var(--shadow-sm);
+        }
+        .feature-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-lg); }
+        .icon-box {
+            width: 60px; height: 60px; background: #F5F5F7; border-radius: 16px;
+            color: var(--text-main); font-size: 28px; margin-bottom: 24px;
+        }
+
+        /* =========================================
+           4. 子页面样式 (Subpages)
+           ========================================= */
+        .section-header h2 { font-size: 40px; letter-spacing: -1px; margin-bottom: 16px; color: #111; }
+        .section-header p { font-size: 18px; }
+
+        /* 特性详情 - 左右布局 */
+        .feature-detail-row {
+            background: #fff; padding: 60px; border-radius: 40px;
+            box-shadow: var(--shadow-sm); gap: 80px; margin-bottom: 60px;
+        }
+        .feature-visual {
+            background: #F9F9FA; border: none; border-radius: 30px; height: 400px;
+        }
+        .chip-visual {
+            width: 140px; height: 140px; background: #fff; border: 1px solid #eee;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05); color: #333;
+        }
+        .chip-lines { background: linear-gradient(90deg, transparent, #ccc, transparent); }
+
+        /* 价格卡片 - 清晰层级 */
+        .price-card {
+            background: #fff; border: none; box-shadow: var(--shadow-sm);
+            padding: 50px 30px; transition: 0.3s;
+        }
+        .price-card:hover { transform: translateY(-5px); }
+        .price-card.popular {
+            background: #fff; border: 2px solid var(--primary);
+            transform: scale(1.05); box-shadow: 0 20px 50px rgba(0,122,255,0.15);
+        }
+        .plan-price { color: #111; letter-spacing: -2px; }
+        .plan-features li { color: var(--text-sec); border-bottom-color: #f0f0f0; }
+        .plan-features li::before { color: var(--accent); }
+
+        /* 服务与B2B - 表单美化 */
+        .service-layout, .b2b-layout { gap: 40px; }
+        .faq-box details {
+            background: #fff; border: none; box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            margin-bottom: 20px; overflow: hidden;
+        }
+        .faq-box summary { padding: 25px; font-weight: 600; }
+        .faq-answer { background: #fafafa; padding: 25px; color: #666; border-top: none; }
+
+        .b2b-form { background: #fff; border: none; box-shadow: var(--shadow-lg); padding: 50px; }
+        .form-input {
+            background: #F5F5F7; border: 1px solid transparent; color: #333;
+            padding: 16px; font-size: 16px; transition: 0.2s;
+        }
+        .form-input:focus { background: #fff; border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px var(--primary-light); }
+
+        /* 动画微调 */
+        @keyframes float { 0%,100% {transform: translateX(-50%) rotateY(-5deg) rotateX(5deg) translateY(0);} 50% {transform: translateX(-50%) rotateY(-5deg) rotateX(5deg) translateY(-15px);} }
+        @keyframes pulse { 0% {transform: scale(1); opacity:1;} 50% {transform: scale(1.1); opacity:0.8;} 100% {transform: scale(1); opacity:1;} }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 48px; }
+            .hero { border-radius: 0; padding-top: 100px; }
+            .feature-detail-row { padding: 30px; flex-direction: column !important; }
+            .nav-links { display: none; }
+            .stats-bar { flex-direction: column; gap: 15px; margin-top: 20px; }
+            .stats-item { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo" onclick="navigateTo('home')">电小果®</div>
+        <div class="nav-links">
+            <button class="nav-btn active" onclick="navigateTo('home')">首页</button>
+            <button class="nav-btn" onclick="navigateTo('sub', 'features')">技术规格</button>
+            <button class="nav-btn" onclick="navigateTo('sub', 'pricing')">订阅计划</button>
+            <button class="nav-btn" onclick="navigateTo('sub', 'service')">支持</button>
+            <button class="nav-btn" onclick="navigateTo('sub', 'business')">企业</button>
+        </div>
+        <button class="buy-btn" onclick="navigateTo('sub', 'pricing')">购买</button>
+    </nav>
+
+    <div id="view-home" class="main-view active">
+        <section class="hero">
+            <div class="hero-content">
+                <span class="tag">New · 智能随身终端</span>
+                <h1>随身 WiFi 的<br>性能怪兽</h1>
+                <p>
+                    优雅的工业设计，蕴含强劲的三网切换技术。<br>
+                    简单，强大，时刻在线。
+                </p>
+                <div style="display:flex; gap:16px; justify-content:center;">
+                    <button class="buy-btn" style="padding:14px 40px; font-size:16px;" onclick="navigateTo('sub', 'pricing')">购买 ¥69.9 起</button>
+                    <button class="nav-btn" style="background:#F5F5F7; color:#333;" onclick="navigateTo('sub', 'features')">进一步了解 ></button>
+                </div>
+            </div>
+            <div class="device-container">
+                <div class="device">
+                    <div class="device-screen">
+                        <div class="wifi-icon"></div>
+                        <div style="margin-top:20px; color:#333; font-weight:700; font-size:16px;">5G Connected</div>
+                        <div style="color:var(--primary); font-size:32px; font-weight:800; margin-top:5px;">120 Mbps</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="stats-bar">
+            <div class="stats-item">
+                <span style="font-size:28px; font-weight:700; color:#111;">5G</span>
+                <div style="color:var(--text-sec); font-size:13px; margin-top:5px;">双模极速网络</div>
+            </div>
+            <div class="stats-item">
+                <span style="font-size:28px; font-weight:700; color:#111;">3网</span>
+                <div style="color:var(--text-sec); font-size:13px; margin-top:5px;">智能无感切换</div>
+            </div>
+            <div class="stats-item">
+                <span style="font-size:28px; font-weight:700; color:#111;">48h</span>
+                <div style="color:var(--text-sec); font-size:13px; margin-top:5px;">全天候续航</div>
+            </div>
+        </div>
+
+        <section class="features-grid">
+            <div style="text-align:center; max-width:600px; margin:0 auto 60px;">
+                <h2 style="font-size:36px; margin-bottom:15px; letter-spacing:-1px;">为何选择电小果？</h2>
+                <p style="color:var(--text-sec);">我们重新思考了连接的方式，让一切变得轻而易举。</p>
+            </div>
+            <div class="grid-container">
+                <div class="feature-card">
+                    <div class="icon-box">⚡️</div>
+                    <h3>极速体验</h3>
+                    <p style="color:var(--text-sec); margin-top:10px;">搭载高性能物联网芯片，无论 4K 视频还是在线游戏，都能保持丝般顺滑。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon-box">🔒</div>
+                    <h3>隐私安全</h3>
+                    <p style="color:var(--text-sec); margin-top:10px;">企业级加密标准，自动拦截陌生设备，为您的数据安全保驾护航。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon-box">✨</div>
+                    <h3>免费试用</h3>
+                    <p style="color:var(--text-sec); margin-top:10px;">真诚的流量体验。购机即送 2 天不限速流量，满意后再充值。</p>
+                </div>
+            </div>
+        </section>
+
+        <div style="text-align:center; padding:50px; color:#aaa; font-size:12px; background:#fff;">
+            Copyright &copy; 2025 DIANXIAOGUO Inc. 保留所有权利。<br>鲁ICP备2025176422号-3
+        </div>
+    </div>
+
+    <div id="view-subpages" class="main-view">
+
+        <div id="section-features" class="sub-content-section">
+            <div class="section-header">
+                <h2>精湛工艺，硬核内心</h2>
+                <p style="color:var(--text-sec);">拆解每一个细节，为您呈现工业级的连接体验</p>
+            </div>
+            <div class="feature-detail-row">
+                <div style="flex:1;">
+                    <h3 style="font-size:28px; margin-bottom:20px;">SOC 智能云芯片</h3>
+                    <p style="color:var(--text-sec); line-height:1.8;">电小果的大脑。内置自研 SOC 云控算法，毫秒级监测基站信号。当主信号微弱时，自动无感切换至备用通道，确保时刻在线。</p>
+                </div>
+                <div class="feature-visual">
+                    <div class="chip-visual">SOC<div class="chip-lines"></div></div>
+                </div>
+            </div>
+            <div class="feature-detail-row">
+                <div style="flex:1;">
+                    <h3 style="font-size:28px; margin-bottom:20px;">5000mAh 聚能电池</h3>
+                    <p style="color:var(--text-sec); line-height:1.8;">告别电量焦虑。高密度锂聚合物电池配合智能休眠算法，支持连续重度使用 18 小时，待机长达一周。</p>
+                </div>
+                <div class="feature-visual" style="font-size:80px; display:flex; align-items:center; justify-content:center;">🔋</div>
+            </div>
+        </div>
+
+        <div id="section-pricing" class="sub-content-section">
+            <div class="section-header">
+                <h2>简单透明的订阅计划</h2>
+                <p style="color:var(--text-sec);">无隐形费用，流量真实不虚标</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <div style="font-size:16px; color:var(--text-sec); font-weight:600;">月度计划</div>
+                    <div class="plan-price">¥49<span style="font-size:16px; font-weight:normal;">/月</span></div>
+                    <ul class="plan-features">
+                        <li>1500G 高速流量</li>
+                        <li>三网智能切换</li>
+                        <li>全程不限速</li>
+                    </ul>
+                    <button class="buy-btn" style="width:100%; margin-top:30px; background:#eee; color:#333;">选择此计划</button>
+                </div>
+                <div class="price-card popular">
+                    <div style="background:var(--primary); color:white; padding:4px 12px; border-radius:12px; font-size:12px; display:inline-block; margin-bottom:15px; font-weight:600;">最受欢迎</div>
+                    <div style="font-size:16px; color:var(--text-sec); font-weight:600;">年度畅享</div>
+                    <div class="plan-price">¥299<span style="font-size:16px; font-weight:normal;">/年</span></div>
+                    <ul class="plan-features">
+                        <li>每月 1500G 流量</li>
+                        <li><strong>免费赠送设备</strong></li>
+                        <li>30天无理由退款</li>
+                    </ul>
+                    <button class="buy-btn" style="width:100%; margin-top:30px;">立即订阅</button>
+                </div>
+                <div class="price-card">
+                    <div style="font-size:16px; color:var(--text-sec); font-weight:600;">三年长期</div>
+                    <div class="plan-price">¥499<span style="font-size:16px; font-weight:normal;">/3年</span></div>
+                    <ul class="plan-features">
+                        <li>超长有效期</li>
+                        <li>设备终身质保</li>
+                        <li>专属客服经理</li>
+                    </ul>
+                    <button class="buy-btn" style="width:100%; margin-top:30px; background:#eee; color:#333;">选择此计划</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-service" class="sub-content-section">
+            <div class="section-header">
+                <h2>我们需要帮忙吗？</h2>
+                <p style="color:var(--text-sec);">专业的支持团队，随时准备解答</p>
+            </div>
+            <div class="service-layout">
+                <div style="background:#fff; padding:50px; border-radius:30px; text-align:center; box-shadow:var(--shadow-sm);">
+                    <div style="width:100px; height:100px; background:#F5F5F7; border-radius:50%; margin:0 auto 24px; display:flex; align-items:center; justify-content:center; font-size:40px;">😊</div>
+                    <h3>在线支持</h3>
+                    <p style="color:var(--text-sec); margin:10px 0 24px;">平均响应时间 < 30秒</p>
+                    <button class="buy-btn" style="width:100%;">开始交谈</button>
+                </div>
+                <div class="faq-box">
+                    <details open><summary>Q: 收到设备后如何激活？</summary><div class="faq-answer">非常简单。扫描设备背面二维码关注公众号，点击“实名认证”绑定设备号，重启设备即可自动连接。</div></details>
+                    <details><summary>Q: 真的不限速吗？</summary><div class="faq-answer">是的，电小果致力于提供优质的网络体验，承诺全程不限速，告别卡顿。</div></details>
+                    <details><summary>Q: 设备保修政策？</summary><div class="faq-answer">我们对产品质量充满信心。非人为损坏，一年内只换不修。</div></details>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-business" class="sub-content-section">
+            <div class="section-header">
+                <h2>电小果 for Business</h2>
+                <p style="color:var(--text-sec);">为企业提供灵活、可控的物联网连接方案</p>
+            </div>
+            <div class="b2b-layout">
+                <div style="padding:20px;">
+                    <h3 style="margin-bottom:24px; font-size:24px;">企业专属权益</h3>
+                    <ul style="color:var(--text-sec); line-height:2.2; list-style:none;">
+                        <li>🔵 <strong>CMS 管理后台</strong> - 批量管理万台设备</li>
+                        <li>🔵 <strong>流量池共享</strong> - 灵活调配，降低成本</li>
+                        <li>🔵 <strong>API 开放接口</strong> - 轻松集成到您的系统</li>
+                        <li>🔵 <strong>品牌定制</strong> - LOGO 与开机画面定制</li>
+                    </ul>
+                </div>
+                <div class="b2b-form">
+                    <h3 style="margin-bottom:24px;">获取企业报价</h3>
+                    <input type="text" class="form-input" placeholder="企业名称">
+                    <input type="text" class="form-input" placeholder="联系人姓名">
+                    <input type="text" class="form-input" placeholder="联系电话">
+                    <button class="buy-btn" style="width:100%; margin-top:10px;">提交需求</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function navigateTo(viewType, subSectionId) {
+            if (viewType === 'home') {
+                document.getElementById('view-home').classList.add('active');
+                document.getElementById('view-subpages').classList.remove('active');
+            } else {
+                document.getElementById('view-home').classList.remove('active');
+                document.getElementById('view-subpages').classList.add('active');
+                document.querySelectorAll('.sub-content-section').forEach(el => el.classList.remove('active'));
+                if(subSectionId) {
+                    document.getElementById('section-' + subSectionId).classList.add('active');
+                }
+            }
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            const btns = document.querySelectorAll('.nav-links .nav-btn');
+            if(viewType === 'home') btns[0].classList.add('active');
+            if(subSectionId === 'features') btns[1].classList.add('active');
+            if(subSectionId === 'pricing') btns[2].classList.add('active');
+            if(subSectionId === 'service') btns[3].classList.add('active');
+            if(subSectionId === 'business') btns[4].classList.add('active');
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
