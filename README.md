@@ -17,7 +17,7 @@
 
 ## 🏗️ 系统架构
 
-```mermaid
+```text
 graph LR
     User[微信用户/WebUI] --> Nginx[Nginx 网关]
     Nginx --> App[FastAPI 后端]
