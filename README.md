@@ -23,6 +23,7 @@
 * [🔧 关键逻辑说明](#-关键逻辑说明)
 * [📝 API 接口说明](#-API-接口说明)
 * [⚠️ 注意事项](#%EF%B8%8F-注意事项)
+* [📞 联系与支持](#-联系与支持)
 
 ---
 
@@ -258,3 +259,11 @@ docker exec -i coze_mysql mysql -uroot -p"${DB_PASSWORD}"  < app/backup.sql
 
 
 3. **静态文件**: `docker-compose.yml` 中 Nginx 和 Backend 共享了 `static` 卷，确保 Web 访问静态资源时无需经过 Python 处理，提高效率。
+
+## 📞 联系与支持
+
+如果您在使用过程中遇到任何问题，或者有新的功能建议，欢迎通过以下方式联系：
+
+* **📧 电子邮件**: [15206898683@163.com](mailto:15206898683@163.com) (请替换为您的真实邮箱)
+* **🐛 提交 Issue**: [GitHub Issues](https://github.com/biayuexingchen-dot/coze-chat-wxwork/issues)
+* **⭐Star 支持**: 如果本项目对您有帮助，欢迎在 GitHub 上点一颗 Star！
