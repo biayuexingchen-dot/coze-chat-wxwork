@@ -78,6 +78,16 @@ docker-compose up -d
 
 ```
 
+### 5. 初始化数据库
+
+首次启动后，MySQL 容器会自动创建空数据库。请执行以下命令导入表结构：
+
+```bash
+# 将备份文件导入到 MySQL 容器中
+docker exec -i coze_mysql mysql -u root -p"$DB_PASSWORD" coze_db < app/backup.sql
+
+```
+
 启动后，服务将在以下端口运行：
 
 * **Nginx (入口)**: `80` (HTTP) / `443` (HTTPS)
