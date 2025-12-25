@@ -1,6 +1,6 @@
--- MySQL dump 10.13  Distrib 8.0.44, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.44, for Linux (x86_64)
 --
--- Host: 115.190.0.255    Database: conversation_history
+-- Host: localhost    Database: conversation_history
 -- ------------------------------------------------------
 -- Server version	8.0.44
 
@@ -14,6 +14,14 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Current Database: `conversation_history`
+--
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `conversation_history` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+
+USE `conversation_history`;
 
 --
 -- Table structure for table `conversation`
@@ -122,4 +130,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-24 16:09:05
+-- Dump completed on 2025-12-25  9:55:33
