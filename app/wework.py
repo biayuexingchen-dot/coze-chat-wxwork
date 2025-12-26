@@ -426,7 +426,7 @@ async def async_reply_msg(msgid: str, external_userid: str, open_kfid: str, cont
     # =========================================================
     # ✅ 步骤 C: 调用 AI (传入 Internal ID)
     # =========================================================
-    # Coze 里的 user_id 参数现在是 "dxg_xxxx"，这很好，Coze 就能认出同一个用户
+    # Coze 里的 user_id 参数现在是 "user_xxxx"，这很好，Coze 就能认出同一个用户
     reply_text = await async_ai_reply_coze(
         content=content,
         user_id=internal_user_id,

@@ -93,8 +93,8 @@ async def openai_chat(req: dict):
     # WebUI 通常在 header 里不传真实用户ID。
     # 建议这里不要写死，而是结合 req 中的信息或者生成一个固定的 WebUI 专用 ID
     # 这里沿用你写的 ID，但在实际生产中建议区分不同 WebUI 用户
-    user_id = "dxg_iNBTEjf7Q7GRUc0aeO3egQ"
-    DEFAULT_WEBUI_KFID = "wkx_nIaAAAFdIfU_btVBQP7viqS5TIFw"
+    user_id = "user_XXXXXXXXXX"
+    DEFAULT_WEBUI_KFID = "wkx_XXXXXXXXXX"
 
     # 2. 处理特殊指令 (WebUI 的建议后续问题逻辑)
     if user_message.startswith("### Task:"):
@@ -337,7 +337,7 @@ async def async_reply_msg(msgid: str, external_userid: str, open_kfid: str, cont
     # =========================================================
     # ✅ 步骤 C: 调用 AI (传入 Internal ID)
     # =========================================================
-    # Coze 里的 user_id 参数现在是 "dxg_xxxx"，这很好，Coze 就能认出同一个用户
+    # Coze 里的 user_id 参数现在是 "user_xxxx"，这很好，Coze 就能认出同一个用户
     reply_text = await async_ai_reply_coze(
         content=content,
         user_id=internal_user_id,

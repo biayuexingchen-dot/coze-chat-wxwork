@@ -129,7 +129,7 @@ def get_or_create_internal_user(external_userid: str) -> str:
             # =======================================================
             LOGGER.info(f"🆕 检测到新用户，准备注册: 企微外部联系人ID: {external_userid}")
 
-            new_internal_id = generate_internal_uid()  # 生成 dxg_xxx
+            new_internal_id = generate_internal_uid()  # 生成 user_xxx
 
             user_data = {
                 "user_id": new_internal_id,

@@ -95,33 +95,33 @@ COZE_WORKFLOW_ID=...
 
 #### 4.1 准备 SSL 证书
 
-请确保项目根目录下的 `ssl` 文件夹结构与 Nginx 配置一致（请将 `dxgrobot.com` 替换为你的实际域名）：
+请确保项目根目录下的 `ssl` 文件夹结构与 Nginx 配置一致（请将 `testrobot.com` 替换为你的实际域名）：
 
 ```text
 ssl/
-└── dxgrobot.com/
-    ├── dxgrobot.com.key
-    └── dxgrobot.com.pem
+└── testrobot.com/
+    ├── testrobot.com.key
+    └── testrobot.com.pem
 
 ```
 
 #### 4.2 配置 Nginx
 
-在 `config/nginx/` 目录下创建配置文件（例如 `dxgrobot.conf`），用于反向代理和 SSL 卸载。
+在 `config/nginx/` 目录下创建配置文件（例如 `testrobot.conf`），用于反向代理和 SSL 卸载。
 
-> ⚠️ **注意**：请将下文中的 `dxgrobot.com` 替换为您自己的实际域名。
+> ⚠️ **注意**：请将下文中的 `testrobot.com` 替换为您自己的实际域名。
 
 ```nginx
 server {
     listen 80;
-    server_name dxgrobot.com www.dxgrobot.com;
+    server_name testrobot.com www.testrobot.com;
     # 强制跳转 HTTPS
     return 301 https://$host$request_uri;
 }
 
 server {
     listen 443 ssl;
-    server_name dxgrobot.com www.dxgrobot.com;
+    server_name testrobot.com www.testrobot.com;
     ......
 }
 
@@ -200,9 +200,9 @@ docker exec -i coze_mysql mysql -uroot -p"${DB_PASSWORD}"  < app/backup.sql
 ├── config/
 │   └── nginx/               # Nginx 配置文件挂载源
 ├── ssl/                     # SSL 证书存放目录 (对应 docker-compose 挂载)
-│   └── dxgrobot.com/        # 建议按域名建立子文件夹
-│       ├── dxgrobot.com.key # 私钥文件
-│       └── dxgrobot.com.pem # 证书文件
+│   └── testrobot.com/        # 建议按域名建立子文件夹
+│       ├── testrobot.com.key # 私钥文件
+│       └── testrobot.com.pem # 证书文件
 ├── logs/                    # 运行日志
 ├── data/                    # 数据库持久化数据
 ├── Dockerfile               # 后端镜像构建文件

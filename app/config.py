@@ -22,7 +22,7 @@ DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
 # Mysql 配置
 DB_USER = os.getenv("DB_USER", "root")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "Chenyunmolu521!")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "root")
 DB_HOST = os.getenv("DB_HOST", "localhost")
 DB_PORT = int(os.getenv("DB_PORT", 3306))
 DB_NAME = os.getenv("DB_NAME", "conversation_history")
@@ -40,13 +40,13 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(level
 LOGGER = logging.getLogger(__name__)
 
 # 上传图片的 URL
-SERVER_BASE_URL = "https://dxgrobot.com"
+SERVER_BASE_URL = "https://testrobot.com"
 TEMP_IMAGE_DIR = "static/images"
 os.makedirs(TEMP_IMAGE_DIR, exist_ok=True)
 
 
 # 构造内部用户ID
-def generate_internal_uid(prefix="dxg"):
+def generate_internal_uid(prefix="user"):
     """
     构造类似微信风格的 ID
     格式: prefix + base64(uuid bytes)
@@ -77,19 +77,19 @@ def generate_internal_uid(prefix="dxg"):
 # Value 是对应的 Coze 机器人配置
 COZE_BOT_CONFIGS = {
     # 🤖 账号 A: 小远 (生产环境)
-    "wkx_nIaAAASbMgsrcIlkMj-qJz6Ztcnw": {
-        "name": "小远",
-        "token": "pat_rtIdNp2PG1HS7bflO86cVHjO79YzP08n7uP2qOOxqmrjGLih2VYCbPd8hpunizba",
-        "workflow_id": "7522357917102800930",
-        "app_id": "7522316251134771240"
+    "wkx_XXXXXXXXXXX": {
+        "name": "test1",
+        "token": "pat_XXXXXXXXXX",
+        "workflow_id": "XXXXXXXXXX",
+        "app_id": "XXXXXXXXXX"
     },
 
     # 🤖 账号 B: 微服优选客服 (生产环境)
-    "wkx_nIaAAAFdIfU_btVBQP7viqS5TIFw": {
-        "name": "微服优选客服",
-        "token": "pat_xKmkX8CNgfv6COg2ABcmI2eoGcT1kBEQxZlYw3qd0iCxTxnMQbOjcn1J0Jjeah5r",
-        "workflow_id": "7572762707839156278",
-        "app_id": "7572502509857177651"
+    "wkx_XXXXXXXXXXXXXXXXXXXXXX": {
+        "name": "test2",
+        "token": "pat_XXXXXXXXXX",
+        "workflow_id": "XXXXXXXXXX",
+        "app_id": "XXXXXXXXXX"
     },
 
     # 🛡️ 默认/兜底配置
@@ -97,9 +97,9 @@ COZE_BOT_CONFIGS = {
     "default": {
         "name": "默认Bot",
         # 尝试从环境变量读取，如果没有则使用硬编码
-        "token": os.getenv("COZE_PAT", "pat_rtIdNp2PG1HS7bflO86cVHjO79YzP08n7uP2qOOxqmrjGLih2VYCbPd8hpunizba").strip(),
-        "workflow_id": os.getenv("COZE_WORKFLOW_ID", "7522357917102800930"),
-        "app_id": os.getenv("COZE_APP_ID", "7522316251134771240")
+        "token": os.getenv("COZE_PAT", "pat_XXXXXXXXXX").strip(),
+        "workflow_id": os.getenv("COZE_WORKFLOW_ID", "XXXXXXXXXX"),
+        "app_id": os.getenv("COZE_APP_ID", "XXXXXXXXXX")
     }
 }
 
