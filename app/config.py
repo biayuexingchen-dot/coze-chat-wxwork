@@ -76,17 +76,17 @@ def generate_internal_uid(prefix="user"):
 # 这里的 Key 是微信客服的 OpenKfId (wk开头)
 # Value 是对应的 Coze 机器人配置
 COZE_BOT_CONFIGS = {
-    # 🤖 账号 A: 小远 (生产环境)
+    # 🤖 账号 A: 测试1 (生产环境)
     "wkx_XXXXXXXXXXX": {
-        "name": "test1",
+        "name": "测试1",
         "token": "pat_XXXXXXXXXX",
         "workflow_id": "XXXXXXXXXX",
         "app_id": "XXXXXXXXXX"
     },
 
-    # 🤖 账号 B: 微服优选客服 (生产环境)
+    # 🤖 账号 B: 测试2 (生产环境)
     "wkx_XXXXXXXXXXXXXXXXXXXXXX": {
-        "name": "test2",
+        "name": "测试2",
         "token": "pat_XXXXXXXXXX",
         "workflow_id": "XXXXXXXXXX",
         "app_id": "XXXXXXXXXX"
