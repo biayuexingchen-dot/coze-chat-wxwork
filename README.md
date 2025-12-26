@@ -70,7 +70,7 @@ cd coze-chat-wxwork
 
 ### 3. 基础配置
 
-在项目根目录创建 `.env` 文件（参考以下配置）：
+在项目根目录创建 `.env` 文件（参考以下配置），并在微信客服后台完成回调URL相关配置：
 
 ```ini
 # --- 数据库配置 ---
@@ -80,7 +80,7 @@ DB_PASSWORD=your_mysql_password
 # --- Redis 配置 ---
 REDIS_PASSWORD=your_redis_password
 
-# --- 企业微信客服配置 ---
+# --- 企业微信客服配置---
 WEWORK_CORPID=ww12345678...
 WEWORK_TOKEN=your_token
 WEWORK_ENCODING_AES_KEY=your_aes_key...
